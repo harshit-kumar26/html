@@ -1,56 +1,68 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>2D Car Racing Game</title>
-    <style>
-        canvas {
-            border: 1px solid black;
-            display: block;
-            margin: 0 auto;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CharacterController : MonoBehaviour
+{
+    public float moveSpeed = 5f;
+    public float punchPower = 10f;
+
+    void Update()
+    {
+        float horizontalInput = Input.GetAxis("Horizontal");
+        Vector2 movement = new Vector2(horizontalInput * moveSpeed, 0);
+        transform.Translate(movement * Time.deltaTime);
+
+        if (Input.GetButtonDown("Fire1")) // You would need to configure input axes.
+        {
+            Punch();
         }
-    </style>
-</head>
-<body>
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
-    <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        
-        // Car variables
-        let carX = 100;
-        const carY = 450;
-        const carWidth = 50;
-        const carHeight = 100;
-        const carSpeed = 5;
+    }
 
-        // Game loop
-        function gameLoop() {
-            // Clear the canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+    void Punch()
+    {
+        // Implement punch animation and damage calculations.
+    }
+}
 
-            // Draw the road
-            ctx.fillStyle = 'gray';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+public class CharacterCombat : MonoBehaviour
+{
+    public int maxHealth = 100;
+    public int currentHealth;
 
-            // Draw the car
-            ctx.fillStyle = 'red';
-            ctx.fillRect(carX, carY, carWidth, carHeight);
+    void Start()
+    {
+        currentHealth = maxHealth;
+    }
 
-            requestAnimationFrame(gameLoop);
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+
+        if (currentHealth <= 0)
+        {
+            Die();
         }
+    }
 
-        // Handle keyboard input
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'ArrowLeft' && carX > 0) {
-                carX -= carSpeed;
-            } else if (event.key === 'ArrowRight' && carX + carWidth < canvas.width) {
-                carX += carSpeed;
-            }
-        });
+    void Die()
+    {
+        // Implement character death animation and game logic.
+    }
+}
 
-        gameLoop();
-    </script>
-</body>
-</html>
+public class GameManager : MonoBehaviour
+{
+    public Transform player1SpawnPoint;
+    public Transform player2SpawnPoint;
 
-       
+    void Start()
+    {
+        // Instantiate player characters at spawn points.
+    }
+
+    void Update()
+    {
+        // Implement game state management, including round progression.
+    }
+}
