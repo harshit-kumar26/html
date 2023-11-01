@@ -1,53 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Translation App</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="translation-container">
-        <h1>Translate Words</h1>
-        <form id="translation-form">
-            <label for="text">Enter text:</label>
-            <input type="text" id="text" placeholder="Enter text to translate" required>
-            <select id="translation-direction">
-                <option value="hin-to-eng">Hindi to English</option>
-                <option value="eng-to-hin">English to Hindi</option>
-            </select>
-            <button type="submit">Translate</button>
-        </form>
-        <div class="translation-result" id="translation-result">
-            Translation will appear here.
-        </div>
-    </div>
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Translation App</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="translation-container">
-        <h1>Translate Words</h1>
-        <form id="translation-form">
-            <label for="text">Enter text:</label>
-            <input type="text" id="text" placeholder="Enter text to translate" required>
-            <select id="translation-direction">
-                <option value="hi">Hindi to English</option>
-                <option value="en">English to Hindi</option>
-            </select>
-            <button type="submit">Translate</button>
-        </form>
-        <div class="translation-result" id="translation-result">
-            Translation will appear here.
-        </div>
-    </div>
+    <form action="/register" method="POST">
+    <input type="text" name="username" placeholder="Username">
+    <input type="password" name="password" placeholder="Password">
+    <input type="submit" value="Register">
+</form>
+app.post('/register', (req, res) => {
+    const { username, password } = req.body;
+    // Store the user in the database (with proper validation and password hashing).
+    // Send a response indicating success or failure.
+});
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
-    <script src="script.js"></script>
+const app = express();
+app.use(bodyParser.urlencoded({ extended: true }));
+
+mongoose.connect('mongodb://localhost/quizapp', { useNewUrlParser: true });
+
+const userSchema = new mongoose.Schema({
+    username: String,
+    password: String,
+});
+
+const User = mongoose.model('User', userSchema);
+
+app.post('/register', (req, res) => {
+    const { username, password } = req.body;
+    const newUser = new User({ username, password });
+    newUser.save((err) => {
+        if (err) {
+            console.log(err);
+            res.send('Registration failed.');
+        } else {
+            res.send('Registration successful.');
+        }
+    });
+});
+
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+});
+
 </body>
 </html>
 
