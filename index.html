@@ -1,48 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
+    <title>Registration</title>
+</head>
+<body>
+    <h1>Registration</h1>
     <form action="/register" method="POST">
-    <input type="text" name="username" placeholder="Username">
-    <input type="password" name="password" placeholder="Password">
-    <input type="submit" value="Register">
-</form>
-app.post('/register', (req, res) => {
-    const { username, password } = req.body;
-    // Store the user in the database (with proper validation and password hashing).
-    // Send a response indicating success or failure.
-});
-const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-
-const app = express();
-app.use(bodyParser.urlencoded({ extended: true }));
-
-mongoose.connect('mongodb://localhost/quizapp', { useNewUrlParser: true });
-
-const userSchema = new mongoose.Schema({
-    username: String,
-    password: String,
-});
-
-const User = mongoose.model('User', userSchema);
-
-app.post('/register', (req, res) => {
-    const { username, password } = req.body;
-    const newUser = new User({ username, password });
-    newUser.save((err) => {
-        if (err) {
-            console.log(err);
-            res.send('Registration failed.');
-        } else {
-            res.send('Registration successful.');
-        }
-    });
-});
-
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
-});
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="submit" value="Register">
+    </form>
+    <!DOCTYPE html>
+<html>
+<head>
+    <title>Registration</title>
+</head>
+<body>
+    <h1>Registration</h1>
+    <form action="/register" method="POST">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="submit" value="Register">
+    </form>
+    <!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form action="/login" method="POST">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="submit" value="Login">
+    </form>
+</body>
+</html>
 
 </body>
 </html>
