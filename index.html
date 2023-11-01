@@ -1,44 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Registration</title>
+    <title>2D Car Racing Game</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
 </head>
 <body>
-    <h1>Registration</h1>
-    <form action="/register" method="POST">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <input type="submit" value="Register">
-    </form>
-    <!DOCTYPE html>
-<html>
-<head>
-    <title>Registration</title>
-</head>
-<body>
-    <h1>Registration</h1>
-    <form action="/register" method="POST">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <input type="submit" value="Register">
-    </form>
-    <!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
-</head>
-<body>
-    <h1>Login</h1>
-    <form action="/login" method="POST">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <input type="submit" value="Login">
-    </form>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Car variables
+        let carX = 100;
+        const carY = 450;
+        const carWidth = 50;
+        const carHeight = 100;
+        const carSpeed = 5;
+
+        // Game loop
+        function gameLoop() {
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the road
+            ctx.fillStyle = 'gray';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the car
+            ctx.fillStyle = 'red';
+            ctx.fillRect(carX, carY, carWidth, carHeight);
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Handle keyboard input
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowLeft' && carX > 0) {
+                carX -= carSpeed;
+            } else if (event.key === 'ArrowRight' && carX + carWidth < canvas.width) {
+                carX += carSpeed;
+            }
+        });
+
+        gameLoop();
+    </script>
 </body>
 </html>
 
-</body>
-</html>
-
-</body>
-</html>
+       
