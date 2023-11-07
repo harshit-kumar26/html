@@ -1,68 +1,64 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+#include <QApplication>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QFileDialog>
+#include <QTextEdit>
 
-public class CharacterController : MonoBehaviour
-{
-    public float moveSpeed = 5f;
-    public float punchPower = 10f;
+class MyWidget : public QWidget {
+    Q_OBJECT
 
-    void Update()
-    {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        Vector2 movement = new Vector2(horizontalInput * moveSpeed, 0);
-        transform.Translate(movement * Time.deltaTime);
+public:
+    MyWidget(QWidget *parent = 0) : QWidget(parent) {
+        QVBoxLayout *layout = new QVBoxLayout(this);
 
-        if (Input.GetButtonDown("Fire1")) // You would need to configure input axes.
-        {
-            Punch();
+        QLabel *videoLabel = new QLabel("Upload Video/Audio:");
+        QPushButton *videoButton = new QPushButton("Browse");
+        connect(videoButton, SIGNAL(clicked()), this, SLOT(uploadVideoAudio()));
+        videoPathLabel = new QLabel("");
+        layout->addWidget(videoLabel);
+        layout->addWidget(videoButton);
+        layout->addWidget(videoPathLabel);
+
+        QLabel *textLabel = new QLabel("Upload Text:");
+        textEdit = new QTextEdit(this);
+        QPushButton *submitButton = new QPushButton("Submit");
+        connect(submitButton, SIGNAL(clicked()), this, SLOT(submitText()));
+        layout->addWidget(textLabel);
+        layout->addWidget(textEdit);
+        layout->addWidget(submitButton);
+
+        setLayout(layout);
+    }
+
+public slots:
+    void uploadVideoAudio() {
+        QString filePath = QFileDialog::getOpenFileName(this, "Upload Video/Audio", "", "Video/Audio Files (*.mp4 *.avi *.mp3 *.wav)");
+        if (!filePath.isEmpty()) {
+            videoPathLabel->setText(filePath);
+            // Process the selected video/audio file
         }
     }
 
-    void Punch()
-    {
-        // Implement punch animation and damage calculations.
+    void submitText() {
+        QString text = textEdit->toPlainText();
+        // Process the submitted text
     }
+
+private:
+    QLabel *videoPathLabel;
+    QTextEdit *textEdit;
+};
+
+int main(int argc, char *argv[]) {
+    QApplication app(argc, argv);
+
+    MyWidget widget;
+    widget.setWindowTitle("Upload Application");
+    widget.show();
+
+    return app.exec();
 }
 
-public class CharacterCombat : MonoBehaviour
-{
-    public int maxHealth = 100;
-    public int currentHealth;
-
-    void Start()
-    {
-        currentHealth = maxHealth;
-    }
-
-    public void TakeDamage(int damage)
-    {
-        currentHealth -= damage;
-
-        if (currentHealth <= 0)
-        {
-            Die();
-        }
-    }
-
-    void Die()
-    {
-        // Implement character death animation and game logic.
-    }
-}
-
-public class GameManager : MonoBehaviour
-{
-    public Transform player1SpawnPoint;
-    public Transform player2SpawnPoint;
-
-    void Start()
-    {
-        // Instantiate player characters at spawn points.
-    }
-
-    void Update()
-    {
-        // Implement game state management, including round progression.
-    }
-}
+#include "main.moc"
