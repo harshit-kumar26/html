@@ -1,62 +1,74 @@
 #include <QApplication>
-#include <QWidget>
-#include <QVBoxLayout>
-#include <QLabel>
+#include <QMainWindow>
 #include <QPushButton>
 #include <QFileDialog>
-#include <QTextEdit>
+#include <QFile>
 
-class MyWidget : public QWidget {
+class FileUploadApp : public QMainWindow
+{
     Q_OBJECT
 
 public:
-    MyWidget(QWidget *parent = 0) : QWidget(parent) {
-        QVBoxLayout *layout = new QVBoxLayout(this);
+    FileUploadApp() {
+        // Set up the main window
+        setWindowTitle("File Upload Application");
 
-        QLabel *videoLabel = new QLabel("Upload Video/Audio:");
-        QPushButton *videoButton = new QPushButton("Browse");
-        connect(videoButton, SIGNAL(clicked()), this, SLOT(uploadVideoAudio()));
-        videoPathLabel = new QLabel("");
-        layout->addWidget(videoLabel);
+        // Create buttons for video/audio and text file uploads
+        QPushButton* videoButton = new QPushButton("Upload Video/Audio", this);
+        QPushButton* textButton = new QPushButton("Upload Text File", this);
+
+        connect(videoButton, &QPushButton::clicked, this, &FileUploadApp::uploadVideoAudio);
+        connect(textButton, &QPushButton::clicked, this, &FileUploadApp::uploadText);
+
+        // Layout
+        QWidget* centralWidget = new QWidget(this);
+        setCentralWidget(centralWidget);
+
+        QVBoxLayout* layout = new QVBoxLayout(centralWidget);
         layout->addWidget(videoButton);
-        layout->addWidget(videoPathLabel);
-
-        QLabel *textLabel = new QLabel("Upload Text:");
-        textEdit = new QTextEdit(this);
-        QPushButton *submitButton = new QPushButton("Submit");
-        connect(submitButton, SIGNAL(clicked()), this, SLOT(submitText()));
-        layout->addWidget(textLabel);
-        layout->addWidget(textEdit);
-        layout->addWidget(submitButton);
-
-        setLayout(layout);
+        layout->addWidget(textButton);
     }
 
 public slots:
     void uploadVideoAudio() {
-        QString filePath = QFileDialog::getOpenFileName(this, "Upload Video/Audio", "", "Video/Audio Files (*.mp4 *.avi *.mp3 *.wav)");
-        if (!filePath.isEmpty()) {
-            videoPathLabel->setText(filePath);
-            // Process the selected video/audio file
+        QString videoPath = QFileDialog::getOpenFileName(this, "Select Video/Audio", "", "Video/Audio Files (*.mp4 *.avi *.mp3 *.wav)");
+
+        if (!videoPath.isEmpty()) {
+            // Implement the file storage logic
+            QString destinationPath = "your_destination_directory/"; // Set the destination directory path
+            QString newVideoPath = destinationPath + QFileInfo(videoPath).fileName();
+
+            if (QFile::copy(videoPath, newVideoPath)) {
+                // File copied successfully
+            } else {
+                // Handle error
+            }
         }
     }
 
-    void submitText() {
-        QString text = textEdit->toPlainText();
-        // Process the submitted text
-    }
+    void uploadText() {
+        QString textPath = QFileDialog::getOpenFileName(this, "Select Text File", "", "Text Files (*.txt *.doc *.pdf)");
 
-private:
-    QLabel *videoPathLabel;
-    QTextEdit *textEdit;
+        if (!textPath.isEmpty()) {
+            // Implement the file storage logic for text files
+            QString destinationPath = "your_destination_directory/"; // Set the destination directory path
+            QString newTextPath = destinationPath + QFileInfo(textPath).fileName();
+
+            if (QFile::copy(textPath, newTextPath)) {
+                // File copied successfully
+            } else {
+                // Handle error
+            }
+        }
+    }
 };
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     QApplication app(argc, argv);
 
-    MyWidget widget;
-    widget.setWindowTitle("Upload Application");
-    widget.show();
+    FileUploadApp fileUploadApp;
+    fileUploadApp.show();
 
     return app.exec();
 }
